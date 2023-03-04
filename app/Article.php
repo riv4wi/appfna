@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Article extends Model
 {
     protected $primaryKey = 'uuid';
+    public $incrementing = false;
 
     public function user(): BelongsTo
     {
