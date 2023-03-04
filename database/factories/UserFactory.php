@@ -1,9 +1,10 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+/** @var Factory $factory */
 
 use App\User;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Str;
 
 /*
@@ -17,12 +18,26 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(User::class, function (Faker $faker) {
+//$factory->define(User::class,  function (Faker $faker) {
+//    $faker->locale('pt_BR');
+//    return [
+//        'uuid' => $faker->uuid,
+//        'username' => $faker->userName,
+//        'email' => $faker->unique()->safeEmail,
+//        'email_verified_at' => now(),
+//        'password' => bcrypt($faker->randomKey),
+//        'remember_token' => Str::random(10),
+//    ];
+//});
+
+$factory->define(User::class,  function (Faker $faker) {
+    $faker->locale('ar_SA');
     return [
-        'name' => $faker->name,
+        'uuid' => $faker->uuid,
+        'username' => $faker->userName,
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        'password' => bcrypt($faker->randomKey),
         'remember_token' => Str::random(10),
     ];
 });
