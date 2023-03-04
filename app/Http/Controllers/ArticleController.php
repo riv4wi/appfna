@@ -42,4 +42,20 @@ class ArticleController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Photo deleted successfully']);
     }
+
+    public function listArticlesByUser($user_uuid): JsonResponse
+    {
+        $articles = Article::with('photos')
+            ->where('user_uuid', $user_uuid)
+            ->get()
+            ->toArray();
+
+        foreach ($articles as &$article) {
+            foreach ($article['photos'] as &$photo) {
+                $photo['url'] = asset('api/images/' . $photo['path']);
+            }
+        }
+
+        return response()->json(['status' => 'success', 'data' => $articles]);
+    }
 }

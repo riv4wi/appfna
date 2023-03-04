@@ -24,3 +24,6 @@ Route::post('articles/{article_uuid}/photos', [ArticleController::class, 'addPho
 
 // To remove a photo from an article
 Route::delete('articles/{article_uuid}/photos/{photo_uuid}', [ArticleController::class, 'deletePhoto']);
+
+// To list all articles with their images
+Route::get('users/{user_uuid}/articles', [ArticleController::class, 'listArticlesByUser']);
