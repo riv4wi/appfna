@@ -18,6 +18,13 @@ class UserTableSeeder extends Seeder
             'password'  => bcrypt('123'),
         ]);
 
-        factory(App\User::class,  20)->create();
+        factory(App\User::class)->create([
+            'uuid'      => 'e018658c-11bb-47cb-9011-e1374eeac731',
+            'username' 	=> 'susy.garrillo',
+            'email'     => 'susy.garrillo@gmail.com',
+            'password'  => bcrypt('123'),
+        ]);
+
+        factory(App\User::class,20)->create();
     }
 }

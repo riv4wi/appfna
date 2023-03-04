@@ -2,10 +2,10 @@
 
 /** @var Factory $factory */
 
+use App\Comment;
 use App\User;
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
-use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,13 +18,14 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(User::class,  function (Faker $faker) {
+$factory->define(Comment::class,  function (Faker $faker) {
     return [
         'uuid' => $faker->uuid,
-        'username' => $faker->userName,
-        'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
-        'password' => bcrypt($faker->randomKey),
-        'remember_token' => Str::random(10),
+        'data' => $faker->realText,
+        'article_uuid' => $faker->randomElement([
+            '808116ca-2e70-466f-8580-e07e4e7d1174',
+            '8749d65f-14c9-4665-8243-9530af4ceb19',
+            'afc918e8-fe8d-42ce-a145-fba5d4cfbebb'
+        ])
     ];
 });
