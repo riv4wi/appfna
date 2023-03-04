@@ -32,4 +32,14 @@ class ArticleController extends Controller
 
         return response()->json(['status' => 'error', 'message' => 'No photo found']);
     }
+
+    public function deletePhoto($article_uuid, $photo_uuid): JsonResponse
+    {
+        $article = Article::findOrFail($article_uuid);
+        $photo = Photo::where('article_uuid', $article_uuid)->where('uuid', $photo_uuid)->firstOrFail();
+        Storage::delete($photo->path);
+        $photo->delete();
+
+        return response()->json(['status' => 'success', 'message' => 'Photo deleted successfully']);
+    }
 }
