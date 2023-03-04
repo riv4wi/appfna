@@ -15,7 +15,7 @@ class CreatePhotosTable extends Migration
     {
         Schema::create('photos', function (Blueprint $table) {
             $table->uuid('uuid')->primary();
-            $table->string('path');
+            $table->string('path')->nullable();
             $table->string('original_name');
             $table->uuid('article_uuid');
             $table->foreign('article_uuid')->references('uuid')->on('articles')->onDelete('cascade');
