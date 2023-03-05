@@ -11,6 +11,18 @@ class Article extends Model
     protected $primaryKey = 'uuid';
     public $incrementing = false;
 
+    protected $fillable = [
+        'uuid',
+        'title',
+        'content',
+        'user_uuid',
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_uuid', 'uuid');

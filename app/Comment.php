@@ -4,10 +4,23 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 class Comment extends Model
 {
     protected $primaryKey = 'uuid';
+    public $incrementing = false;
+
+    protected $fillable = [
+        'uuid',
+        'data',
+        'article_uuid',
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+    }
 
     public function article(): BelongsTo
     {

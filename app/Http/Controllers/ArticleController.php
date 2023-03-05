@@ -8,10 +8,34 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 
 class ArticleController extends Controller
 {
+    public function createArticle(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'content' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $article = new Article();
+        $article->uuid = Uuid::uuid4();
+        $article->title = $request->input('title');
+        $article->content = $request->input('content');
+        $article->user_uuid = 'e018658c-11bb-47cb-9011-e1374eeac731';
+        //$article->user_uuid = Auth::user()->uuid;// todo for when I have the authentication
+        $article->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Article created successfully']);
+    }
+
     public function addPhoto(Request $request, $article_uuid): JsonResponse
     {
         $article = Article::findOrFail($article_uuid);

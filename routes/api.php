@@ -27,3 +27,7 @@ Route::delete('articles/{article_uuid}/photos/{photo_uuid}', [ArticleController:
 
 // To list all articles with their images
 Route::get('users/{user_uuid}/articles', [ArticleController::class, 'listArticlesByUser']);
+
+// To create an article
+Route::post('/articles', [ArticleController::class, 'createArticle']);
+
