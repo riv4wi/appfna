@@ -36,6 +36,17 @@ class ArticleController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Article created successfully']);
     }
 
+    public function deleteArticle($article_uuid): JsonResponse
+    {
+        $article = Article::where('uuid', $article_uuid)->first();
+        if (!$article) {
+            return response()->json(['error' => 'Article not found'], 404);
+        }
+        $article->delete();
+
+        return response()->json(['status' => 'success', 'message' => 'Article deleted successfully']);
+    }
+
     public function addPhoto(Request $request, $article_uuid): JsonResponse
     {
         $article = Article::findOrFail($article_uuid);
