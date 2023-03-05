@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use App\Comment;
+use App\Domain\Statistics;
 use App\Photo;
+use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -144,5 +146,25 @@ class ArticleController extends Controller
         $comment->delete();
 
         return response()->json(['status' => 'success', 'message' => 'Comment deleted successfully'], 200);
+    }
+
+    public function showStatistics(): JsonResponse
+    {
+        $statistics = [];
+        $users = User::select('uuid', 'username')->pluck('username', 'uuid');
+
+        foreach ($users as $user_uuid => $username) {
+            $dataUser = [];
+            $userStat = new Statistics($user_uuid);
+            $dataUser['user_uuid'] = $user_uuid;
+            $dataUser['username'] = $username;
+            $dataUser['articles_with_photo'] = $userStat->getArticlesWithPhotos();
+            $dataUser['articles_without_photo'] = $userStat->getArticlesWithoutPhotos();
+            $dataUser['total_articles'] = $dataUser['articles_with_photo'] + $dataUser['articles_without_photo'];
+            $dataUser['commentsByArticles'] = $userStat->getCommentsByArticles();
+            $statistics[] = $dataUser;
+        }
+
+        return response()->json(['statistics' => $statistics], 200);
     }
 }

@@ -40,3 +40,6 @@ Route::post('articles/{article_uuid}/comments', [ArticleController::class, 'addC
 // To delete comment to an article
 Route::delete('articles/{article_uuid}/comments/{comment_uuid}', [ArticleController::class, 'deleteComment']);
 
+// To show the statistics of all users
+Route::get('statistics', [ArticleController::class, 'showStatistics']);
+
