@@ -37,3 +37,6 @@ Route::get('users/{user_uuid}/articles', [ArticleController::class, 'listArticle
 // To add comment to an article
 Route::post('articles/{article_uuid}/comments', [ArticleController::class, 'addComment']);
 
+// To delete comment to an article
+Route::delete('articles/{article_uuid}/comments/{comment_uuid}', [ArticleController::class, 'deleteComment']);
+

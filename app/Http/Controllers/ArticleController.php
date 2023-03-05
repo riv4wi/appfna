@@ -117,4 +117,32 @@ class ArticleController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Comment added successfully']);
     }
+
+    public function deleteComment(Request $request, $article_uuid, $comment_uuid): JsonResponse
+    {
+        $validator = Validator::make(['article_uuid' => $article_uuid, 'comment_uuid' => $comment_uuid], [
+            'article_uuid' => 'required|uuid',
+            'comment_uuid' => 'required|uuid',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => 'Invalid parameters'], 400);
+        }
+
+        $article = Article::where('uuid', $article_uuid)->first();
+
+        if (!$article) {
+            return response()->json(['error' => 'Article not found'], 404);
+        }
+
+        $comment = Comment::where('uuid', $comment_uuid)->where('article_uuid', $article_uuid)->first();
+
+        if (!$comment) {
+            return response()->json(['error' => 'Comment not found'], 404);
+        }
+
+        $comment->delete();
+
+        return response()->json(['status' => 'success', 'message' => 'Comment deleted successfully'], 200);
+    }
 }
