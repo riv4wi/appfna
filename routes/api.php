@@ -34,3 +34,6 @@ Route::delete('articles/{article_uuid}', [ArticleController::class, 'deleteArtic
 // To list all articles with their images
 Route::get('users/{user_uuid}/articles', [ArticleController::class, 'listArticlesByUser']);
 
+// To add comment to an article
+Route::post('articles/{article_uuid}/comments', [ArticleController::class, 'addComment']);
+

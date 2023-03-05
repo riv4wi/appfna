@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\Comment;
 use App\Photo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Ramsey\Uuid\Uuid;
 
 class ArticleController extends Controller
 {
@@ -26,7 +25,7 @@ class ArticleController extends Controller
         }
 
         $article = new Article();
-        $article->uuid = Uuid::uuid4();
+        $article->uuid = Str::uuid();
         $article->title = $request->input('title');
         $article->content = $request->input('content');
         $article->user_uuid = 'e018658c-11bb-47cb-9011-e1374eeac731';
@@ -92,5 +91,30 @@ class ArticleController extends Controller
         }
 
         return response()->json(['status' => 'success', 'data' => $articles]);
+    }
+
+    public function addComment(Request $request, $article_uuid): JsonResponse
+    {
+        $validator = Validator::make($request->json()->all(), [
+            'data' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $article = Article::where('uuid', $article_uuid)->first();
+
+        if (!$article) {
+            return response()->json(['error' => 'Article not found'], 404);
+        }
+
+        $comment = new Comment();
+        $comment->uuid = Str::uuid();
+        $comment->data = $request->json()->get('data');
+        $comment->article_uuid = $article->uuid;
+        $comment->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Comment added successfully']);
     }
 }
