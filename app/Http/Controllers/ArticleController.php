@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Article;
 use App\Comment;
 use App\Domain\Statistics;
+use App\Http\Resources\ArticleResource;
+use App\Http\Resources\CommentResource;
+use App\Http\Resources\PhotoResource;
 use App\Photo;
 use App\User;
 use Illuminate\Http\JsonResponse;
@@ -26,19 +29,15 @@ class ArticleController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $article = new Article();
+        $article = new Article;
         $article->uuid = Str::uuid();
         $article->title = $request->input('title');
         $article->content = $request->input('content');
+        //todo for when I have the authentication Auth::user()->uuid;
         $article->user_uuid = 'e018658c-11bb-47cb-9011-e1374eeac731';
-        //$article->user_uuid = Auth::user()->uuid;// todo for when I have the authentication
         $article->save();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => __('article.article_created'),
-            'articleUuid'=>$article->uuid
-        ]);
+        return response()->json(new ArticleResource($article), 201);
     }
 
     public function deleteArticle($article_uuid): JsonResponse
@@ -67,11 +66,7 @@ class ArticleController extends Controller
             $photo->article_uuid = $article_uuid;
             $article->photos()->save($photo);
 
-            return response()->json([
-                'status' => 'success',
-                'message' => __('article.photo_added_successfully'),
-                'photoUuid' => $photo->uuid
-            ]);
+            return response()->json(new PhotoResource($photo), 201);
         }
 
         return response()->json(['status' => 'error', 'message' => __('article.no_photo_found')]);
@@ -89,18 +84,8 @@ class ArticleController extends Controller
 
     public function listArticlesByUser($user_uuid): JsonResponse
     {
-        $articles = Article::with('photos')
-            ->where('user_uuid', $user_uuid)
-            ->get()
-            ->toArray();
-
-        foreach ($articles as &$article) {
-            foreach ($article['photos'] as &$photo) {
-                $photo['url'] = asset('api/images/' . $photo['path']);
-            }
-        }
-
-        return response()->json(['status' => 'success', 'data' => $articles]);
+        $articles = Article::with('photos')->where('user_uuid', $user_uuid)->get();
+        return response()->json(ArticleResource::collection($articles), 201);
     }
 
     public function addComment(Request $request, $article_uuid): JsonResponse
@@ -125,11 +110,7 @@ class ArticleController extends Controller
         $comment->article_uuid = $article->uuid;
         $comment->save();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => __('article.comment_added_successfully'),
-            'comment_uuid' => $comment->uuid
-        ]);
+        return response()->json(new CommentResource($comment), 201);
     }
 
     public function deleteComment(Request $request, $article_uuid, $comment_uuid): JsonResponse
