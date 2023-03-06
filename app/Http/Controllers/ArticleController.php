@@ -127,7 +127,7 @@ class ArticleController extends Controller
         $article = Article::where('uuid', $article_uuid)->first();
 
         if (!$article) {
-            return response()->json(['error' => 'Article not found'], 404);
+            return response()->json(['error' => __('article.article_not_found')], 404);
         }
 
         $comment = Comment::where('uuid', $comment_uuid)->where('article_uuid', $article_uuid)->first();
