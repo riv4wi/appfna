@@ -85,7 +85,7 @@ class ArticleController extends Controller
     public function listArticlesByUser($user_uuid): JsonResponse
     {
         $articles = Article::with('photos')->where('user_uuid', $user_uuid)->get();
-        return response()->json(ArticleResource::collection($articles), 201);
+        return response()->json(ArticleResource::collection($articles), 200);
     }
 
     public function addComment(Request $request, $article_uuid): JsonResponse
