@@ -19,27 +19,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// To add an image to an article
-Route::post('articles/{article_uuid}/photos', [ArticleController::class, 'addPhoto']);
+Route::prefix('articles')->group(function () {
+    Route::post('{article_uuid}/photos', [ArticleController::class, 'addPhoto']);
+    Route::delete('{article_uuid}/photos/{photo_uuid}', [ArticleController::class, 'deletePhoto']);
+    Route::post('', [ArticleController::class, 'createArticle']);
+    Route::delete('{article_uuid}', [ArticleController::class, 'deleteArticle']);
+    Route::get('users/{user_uuid}', [ArticleController::class, 'listArticlesByUser']);
+    Route::post('{article_uuid}/comments', [ArticleController::class, 'addComment']);
+    Route::delete('{article_uuid}/comments/{comment_uuid}', [ArticleController::class, 'deleteComment']);
+});
 
-// To remove a photo from an article
-Route::delete('articles/{article_uuid}/photos/{photo_uuid}', [ArticleController::class, 'deletePhoto']);
-
-// To create an article
-Route::post('/articles', [ArticleController::class, 'createArticle']);
-
-// To delete an article of user
-Route::delete('articles/{article_uuid}', [ArticleController::class, 'deleteArticle']);
-
-// To list all articles with their images
-Route::get('users/{user_uuid}/articles', [ArticleController::class, 'listArticlesByUser']);
-
-// To add comment to an article
-Route::post('articles/{article_uuid}/comments', [ArticleController::class, 'addComment']);
-
-// To delete comment to an article
-Route::delete('articles/{article_uuid}/comments/{comment_uuid}', [ArticleController::class, 'deleteComment']);
-
-// To show the statistics of all users
 Route::get('statistics', [ArticleController::class, 'showStatistics']);
-
