@@ -34,18 +34,22 @@ class ArticleController extends Controller
         //$article->user_uuid = Auth::user()->uuid;// todo for when I have the authentication
         $article->save();
 
-        return response()->json(['status' => 'success', 'message' => 'Article created successfully']);
+        return response()->json([
+            'status' => 'success',
+            'message' => __('article.article_created'),
+            'articleUuid'=>$article->uuid
+        ]);
     }
 
     public function deleteArticle($article_uuid): JsonResponse
     {
         $article = Article::where('uuid', $article_uuid)->first();
         if (!$article) {
-            return response()->json(['error' => 'Article not found'], 404);
+            return response()->json(['error' => __('article.article_not_found')], 404);
         }
         $article->delete();
 
-        return response()->json(['status' => 'success', 'message' => 'Article deleted successfully']);
+        return response()->json(['status' => 'success', 'message' => __('article.article_deleted_successfully')]);
     }
 
     public function addPhoto(Request $request, $article_uuid): JsonResponse
@@ -63,10 +67,14 @@ class ArticleController extends Controller
             $photo->article_uuid = $article_uuid;
             $article->photos()->save($photo);
 
-            return response()->json(['status' => 'success', 'message' => 'Photo added successfully']);
+            return response()->json([
+                'status' => 'success',
+                'message' => __('article.photo_added_successfully'),
+                'photoUuid' => $photo->uuid
+            ]);
         }
 
-        return response()->json(['status' => 'error', 'message' => 'No photo found']);
+        return response()->json(['status' => 'error', 'message' => __('article.no_photo_found')]);
     }
 
     public function deletePhoto($article_uuid, $photo_uuid): JsonResponse
@@ -76,7 +84,7 @@ class ArticleController extends Controller
         Storage::delete($photo->path);
         $photo->delete();
 
-        return response()->json(['status' => 'success', 'message' => 'Photo deleted successfully']);
+        return response()->json(['status' => 'success', 'message' => __('article.photo_deleted_successfully')]);
     }
 
     public function listArticlesByUser($user_uuid): JsonResponse
@@ -108,7 +116,7 @@ class ArticleController extends Controller
         $article = Article::where('uuid', $article_uuid)->first();
 
         if (!$article) {
-            return response()->json(['error' => 'Article not found'], 404);
+            return response()->json(['error' =>  __('article.article_not_found')], 404);
         }
 
         $comment = new Comment();
@@ -117,7 +125,7 @@ class ArticleController extends Controller
         $comment->article_uuid = $article->uuid;
         $comment->save();
 
-        return response()->json(['status' => 'success', 'message' => 'Comment added successfully']);
+        return response()->json(['status' => 'success', 'message' => __('article.comment_added_successfully')]);
     }
 
     public function deleteComment(Request $request, $article_uuid, $comment_uuid): JsonResponse
