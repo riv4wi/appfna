@@ -21,8 +21,9 @@ class PassportAuthController extends Controller
             'password' => 'required|string'
         ]);
 
+        $uuid = Str::uuid();
         $user = User::create([
-            'uuid' => Str::uuid(),
+            'uuid' => $uuid,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'username' => $request->username
@@ -30,7 +31,8 @@ class PassportAuthController extends Controller
         $user->save();
 
         return response()->json([
-            'message' => 'Successfully created user!'
+            'message' => 'Successfully created user!',
+            'uuid'=> $uuid
         ], 201);
     }
 
