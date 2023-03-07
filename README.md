@@ -53,7 +53,14 @@ Abrir otra terminal y ejecutar:
 php artisan serve
 ```
 
-Luego importamos la colección de peticiones en Postman y empezamos a manipular la api en Postman
+Luego importamos la colección de peticiones en Postman y empezamos a manipular la api en Postman (Ver la documentación)
 
 Tanto la colección de Postman como el link a la documentación pública de la api está en esta carpeta compartida:
 [Google Drive](https://drive.google.com/drive/folders/1d_K6WGGqNMe0YwJ_q6ZdusLmXeBn2vUC?usp=sharing) (Carpeta pública del proyecto)
+
+## Aspectos a mejorar:
+
+- Se puede mejorar la documentación de la API en Postman agregando un ejemplo de la request y un ejemplo de la response.
+- Mejorar el manejo de las excepciones y el ruteo en archivo de routes. Hay retornos de 404 cuando en realidad debería ser un 401
+- Desarrollar todos los test unitarios, solo puse un par como muestra.
+- Hacer un logueo de todas las peticiones a la API. 
